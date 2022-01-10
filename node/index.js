@@ -2,24 +2,19 @@ const path = require("path");
 const fs = require("fs");
 var params = require("./areaParams");
 
-function mergeProvinces(area, chinaJson, chinaCityJson) {
+function mergeProvinces(area, chinaJson, chinaCityJson, excudes) {
   // type Polygon  type: "MultiPolygon",
   var features = [];
   var chinaFeatures = chinaJson.features;
   var chinaCityFeatures = chinaCityJson.features;
   area.forEach((areaItem, i) => {
-    // childrenNum: 11, level: "province", parent: { adcode: 100000 }, subFeatureIndex: 2, acroutes: [100000]
-    /*  areaItem:{ araeName: "成都仓库",
-    children: ["四川省", "重庆市"],
-    center: [104.065735, 30.659462]} , */
-
     let fetureItem = {
       type: "Feature",
       properties: {
         // adcode: 130000,
-        name: areaItem.araeName,
+        name: areaItem.areaName,
         center: areaItem.center,
-        araeName: areaItem.araeName,
+        areaName: areaItem.areaName,
       },
       geometry: {
         type: "MultiPolygon",
@@ -35,6 +30,7 @@ function mergeProvinces(area, chinaJson, chinaCityJson) {
         if (typeof childrenItem === "string") {
           // 去全国找    properties: { adcode: 110000, name: "北京市",
           obj = chinaFeatures.find(item => item.properties.name === childrenItem);
+          obj.properties.areaName = areaItem.areaName;
           if (!obj) {
             console.log("🚀 ~ file: chinamapAli.js ~ line 157 ~ areaItem.children.forEach---->没找到 ~ obj", childrenItem);
           } else {
@@ -69,9 +65,17 @@ function mergeProvinces(area, chinaJson, chinaCityJson) {
     fetureItem.geometry.coordinates = coordinates;
     features.push(fetureItem);
   });
-  let item = chinaFeatures.find(item => item.properties.adcode === "100000_JD");
-  features.push(item); //缺失的一部分 遗漏的
-  // adcode: "100000_JD"
+
+  // 预防某些省份/地区 没写上,造成地图不完整
+  chinaFeatures.forEach(item => {
+    if (!item.properties.areaName && !excudes.includes(item.properties.name)) {
+      features.push(item); //缺失的一部分 遗漏的
+    }
+  });
+  // obj.properties.areaName = areaItem.areaName;
+  /*   let item = chinaFeatures.find(item => item.properties.adcode === "100000_JD");
+  features.push(item); //缺失的一部分 遗漏的 */
+
   let mapJSON = {
     type: "FeatureCollection",
     features: features,
@@ -86,16 +90,11 @@ function mergeCitys(area, chinaJson, chinaCityJson) {
   var chinaFeatures = chinaJson.features;
   var chinaCityFeatures = chinaCityJson.features;
   area.forEach((areaItem, i) => {
-    // childrenNum: 11, level: "province", parent: { adcode: 100000 }, subFeatureIndex: 2, acroutes: [100000]
-    /*  areaItem:{ araeName: "成都仓库",
-    children: ["四川省", "重庆市"],
-    center: [104.065735, 30.659462]} , */
-
     let fetureItem = {
       type: "Feature",
       properties: {
-        name: areaItem.araeName,
-        araeName: areaItem.araeName,
+        name: areaItem.areaName,
+        areaName: areaItem.areaName,
         center: areaItem.center,
       },
       geometry: {
@@ -112,7 +111,7 @@ function mergeCitys(area, chinaJson, chinaCityJson) {
         if (typeof childrenItem === "string") {
           // 去全国找    properties: { adcode: 110000, name: "北京市",
           obj = chinaFeatures.find(item => item.properties.name === childrenItem);
-          obj.properties.araeName = areaItem.araeName;
+          obj.properties.areaName = areaItem.areaName;
           if (!obj) {
             console.log("🚀 ~ file: chinamapAli.js ~ line 157 ~ areaItem.children.forEach---->没找到 ~ obj", childrenItem);
           } else {
@@ -163,22 +162,21 @@ function mergeCitys(area, chinaJson, chinaCityJson) {
     features: features,
   };
   toWrite(mapJSON, "aliChinaCity");
-  // toWrite(mapJSON, "aliChinaProvince");
+
   /*   chinaFeatures.forEach(item => {
-  // properties: { name: areaItem.araeName, center: areaItem.center },
-  if (!item.properties.araeName) {
-    console.log("araeName 不存在----->", item);
+  // properties: { name: areaItem.areaName, center: areaItem.center },
+  if (!item.properties.areaName) {
+    console.log("areaName 不存在----->", item);
   }
 }); */
   // console.log("🚀 ~ file: chinamapAli.js ~ line 130 ~ mergeProvinces ~ area, chinaJson, chinaCityJson", area, chinaJson, chinaCityJson, features);
 }
 
-// toWrite(mapJSON, "aliChinaProvince");
 const aliChina = require("./chinaAli.json");
 const aliChinaCity = require("./china-cities.json");
 
-mergeProvinces(params.province, aliChina, aliChinaCity);
-mergeCitys(params.city, aliChina, aliChinaCity);
+mergeProvinces(params.province, aliChina, aliChinaCity, params.excudes); // area, chinaJson, chinaCityJson
+mergeCitys(params.city, aliChina, aliChinaCity); //area, chinaJson, chinaCityJson
 function toWrite(data, name) {
   let dir = path.join(__dirname, name + ".json");
   console.log("开始---写入");

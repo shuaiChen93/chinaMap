@@ -132,13 +132,13 @@ function mergeProvinces(area, chinaJson, chinaCityJson) {
   var chinaCityFeatures = chinaCityJson.features;
   area.forEach((areaItem, i) => {
     // childrenNum: 11, level: "province", parent: { adcode: 100000 }, subFeatureIndex: 2, acroutes: [100000]
-    /*  areaItem:{ araeName: "成都仓库",
+    /*  areaItem:{ areaName: "成都仓库",
       children: ["四川省", "重庆市"],
       center: [104.065735, 30.659462]} , */
 
     /* let fetureItem = {
       type: "Feature",
-      properties: { name: areaItem.araeName, center: areaItem.center },
+      properties: { name: areaItem.areaName, center: areaItem.center },
       geometry: {
         type: "MultiPolygon",
         coordinates: [],
@@ -153,12 +153,12 @@ function mergeProvinces(area, chinaJson, chinaCityJson) {
         if (typeof childrenItem === "string") {
           // 去全国找    properties: { adcode: 110000, name: "北京市",
           obj = chinaFeatures.find(item => item.properties.name === childrenItem);
-          obj.properties.araeName = areaItem.araeName;
+          obj.properties.areaName = areaItem.areaName;
           if (!obj) {
             console.log("🚀 ~ file: chinamapAli.js ~ line 157 ~ areaItem.children.forEach---->没找到 ~ obj", childrenItem);
           } else {
             // properties: { adcode: 110000, name: "北京市"
-            obj.properties.areaName = areaItem.araeName;
+            obj.properties.areaName = areaItem.areaName;
             features.push(obj);
             if (obj.geometry.type === "MultiPolygon") {
               // coordinates.push(obj.geometry.coordinates.flat(1));
@@ -183,7 +183,7 @@ function mergeProvinces(area, chinaJson, chinaCityJson) {
               } else if (obj.geometry.type === "Polygon") {
                 coordinates.push(obj.geometry.coordinates);
               } */
-              obj.properties.areaName = areaItem.araeName;
+              obj.properties.areaName = areaItem.areaName;
               features.push(obj);
             }
           });
@@ -204,9 +204,9 @@ function mergeProvinces(area, chinaJson, chinaCityJson) {
   console.log("🚀 ~ file: chinamapAli2.js ~ line 202 ~ area.forEach ~ mapJSON", mapJSON);
   draw(mapJSON);
   /*   chinaFeatures.forEach(item => {
-    // properties: { name: areaItem.araeName, center: areaItem.center },
-    if (!item.properties.araeName) {
-      console.log("araeName 不存在----->", item);
+    // properties: { name: areaItem.areaName, center: areaItem.center },
+    if (!item.properties.areaName) {
+      console.log("areaName 不存在----->", item);
     }
   }); */
   // console.log("🚀 ~ file: chinamapAli.js ~ line 130 ~ mergeProvinces ~ area, chinaJson, chinaCityJson", area, chinaJson, chinaCityJson, features);
@@ -214,23 +214,8 @@ function mergeProvinces(area, chinaJson, chinaCityJson) {
 // mergeProvinces(areaParams.area, aliChina, aliChinaCity);
 
 window.onload = () => {
-  $.getJSON("chinaResult.json", function (data) {
+  $.getJSON("china.json", function (data) {
     console.log("🚀 ~ file: chinamapAli2.js ~ line 218 ~ data", data);
     draw(data);
   });
-  /* $.getJSON("./chinaResult.json",data){
- // url,[data],[callback]
-} */
-  // var url = "chinaResult.json"; /*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
-  // var request = new XMLHttpRequest();
-  // request.open("get", url); /*设置请求方法与路径*/
-  // request.send(null); /*不发送数据到服务器*/
-  // request.onload = function () {
-
-  //   if (request.status == 200) {
-
-  //     var json = JSON.parse(request.responseText);
-  //     console.log("🚀 ~ file: chinamapAli2.js ~ line 232 ~ area.forEach ~ json", json);
-  //   }
-  // };
 };

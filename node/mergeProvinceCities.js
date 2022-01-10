@@ -1,15 +1,16 @@
 const path = require("path");
 const fs = require("fs");
-var cityJson = require("./aliChinaCity2.json");
+
 var provinceJson = require("./aliChinaProvince.json");
-let featuresResult = [];
+console.log("🚀 ~ file: mergeProvinceCities.js ~ line 5 ~ provinceJson", provinceJson);
+var cityJson = require("./aliChinaCity2.json");
+console.log("🚀 ~ file: mergeProvinceCities.js ~ line 7 ~ cityJson", cityJson);
+
 let provinceJsonFeatures = provinceJson.features;
 let cityJsonFeatures = cityJson.features;
 provinceJsonFeatures.forEach(item => {
   let cityObj = cityJsonFeatures.find(cityItem => item.properties.name === cityItem.properties.name || item.properties.name === cityItem.properties.areaName);
   if (cityObj) {
-    /*  "geometry": {
-    "type": "MultiPolygon", */
     if (item.geometry.type === cityObj.geometry.type) {
       item.geometry.coordinates = [].concat(item.geometry.coordinates, cityObj.geometry.coordinates);
     } else {
@@ -28,7 +29,7 @@ let results = {
 };
 
 function toWrite(data) {
-  let dir = path.join(__dirname, "chinaData.json");
+  let dir = path.join(__dirname, "china.json");
   console.log("开始---写入");
   fs.writeFile(dir, JSON.stringify(data), "utf8", err => {
     console.log("写入成功", err);

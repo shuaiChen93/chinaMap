@@ -133,13 +133,13 @@ function mergeProvinces(area, chinaJson, chinaCityJson) {
   var chinaCityFeatures = chinaCityJson.features;
   area.forEach((areaItem, i) => {
     // childrenNum: 11, level: "province", parent: { adcode: 100000 }, subFeatureIndex: 2, acroutes: [100000]
-    /*  areaItem:{ araeName: "成都仓库",
+    /*  areaItem:{ areaName: "成都仓库",
       children: ["四川省", "重庆市"],
       center: [104.065735, 30.659462]} , */
 
     let fetureItem = {
       type: "Feature",
-      properties: { name: areaItem.araeName, center: areaItem.center },
+      properties: { name: areaItem.areaName, center: areaItem.center },
       geometry: {
         type: "MultiPolygon",
         coordinates: [],
@@ -154,7 +154,7 @@ function mergeProvinces(area, chinaJson, chinaCityJson) {
         if (typeof childrenItem === "string") {
           // 去全国找    properties: { adcode: 110000, name: "北京市",
           obj = chinaFeatures.find(item => item.properties.name === childrenItem);
-          obj.properties.araeName = areaItem.araeName;
+          obj.properties.areaName = areaItem.areaName;
           if (!obj) {
             console.log("🚀 ~ file: chinamapAli.js ~ line 157 ~ areaItem.children.forEach---->没找到 ~ obj", childrenItem);
           } else {
@@ -199,9 +199,9 @@ function mergeProvinces(area, chinaJson, chinaCityJson) {
   };
   draw(mapJSON);
   chinaFeatures.forEach(item => {
-    // properties: { name: areaItem.araeName, center: areaItem.center },
-    if (!item.properties.araeName) {
-      console.log("araeName 不存在----->", item);
+    // properties: { name: areaItem.areaName, center: areaItem.center },
+    if (!item.properties.areaName) {
+      console.log("areaName 不存在----->", item);
     }
   });
   // console.log("🚀 ~ file: chinamapAli.js ~ line 130 ~ mergeProvinces ~ area, chinaJson, chinaCityJson", area, chinaJson, chinaCityJson, features);
