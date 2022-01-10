@@ -1,0 +1,19 @@
+如果 将来 配件物流大数据中心 需要重新自定义大区;(或者另外需要做自定义中国大区)
+1.可能要 修改 areaParams.js 的参数 
+2.  node index6.js
+3. 是否城市需要合并边界线 如果是 则(https://mapshaper.org/) 
+4. node index7.js  (合并 省和 城市,得到最终版的 chinaData.json)
+
+
+index4.js  -->   去获取 aliCities.json (存在的话就不要去执行  node index4.js)  (合并全国所有省的城市,生成一个china-cities.json)
+
+index6.js  --->  获得合并好的仓库大区,但是分成了2个 json ( 执行命令:node index6.js)  :  aliChinaProvince.json 不需要去除边界线 ,
+  aliChinaCity.json 需要合并城市之间的边界线
+  ( 如何合并: 打开  https://mapshaper.org/  使用方法参考(https://blog.csdn.net/zhaou_csdn/article/details/113249141)  
+  合并边界命令 :  dissolve 'araeName' -o aliCity2.json   (保存到 当前文件夹下 index7.js 要用)) 
+
+inxdex7.js ---->  为了得到最终版本的chinaData.json (aliChinaProvince.json, aliCity2.json 合并 (同一个仓库大区 省 和 其他省城市 合并,生成最终版的 chinaData.json)   
+) 
+  
+
+  备注: 原始chinaAli.json, provinces/下所有数据都来源于 阿里云数据可视化平台 http://datav.aliyun.com/portal/school/atlas/area_selector
