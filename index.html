@@ -2,7 +2,7 @@
  * @Author: chenguangshuai
  * @Date: 2022-01-07 11:53:37
  * @LastEditors: chenguangshuai
- * @LastEditTime: 2022-01-07 15:50:16
+ * @LastEditTime: 2022-01-11 14:10:15
  * @Description: file content
 -->
 <!DOCTYPE html>
@@ -13,12 +13,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .wrapper {
+            position: relative;
+        }
+        
+        #containerBg,
+        #container {
+            position: absolute;
+            width: 100%;
+            height: 80vh;
+            top: 0;
+            right: 0;
+            left: 0;
+        }
+        
+        #container {
+            z-index: 3;
+        }
+    </style>
 </head>
 
 <body>
 
     <body style="height: 100%; margin: 0">
-        <div id="container" style="height: 80vh;"></div>
+        <div class="wrapper">
+            <div id="containerBg"></div>
+            <div id="container" style="height: 80vh;"></div>
+        </div>
+
         <!-- <div id="echartsMapBox" style="height: 100%"></div> -->
         <script src="./jquery-3.3.1.min.js"></script>
         <script src="./echarts-5.1.2.min.js"></script>
@@ -27,7 +55,7 @@
         <!-- <script src="./aliChinaCity.js"></script> -->
         <script src="./areaParams.js"></script>
         <!-- <script src="./china_area.js"></script> -->
-        <script src="./chinamapAli2.js"></script>
+        <script src="./chinamapAli.js"></script>
 
     </body>
 
